@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentence Structures — Grammar Galaxy!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --simple: #FF6B6B;
+  --compound: #FFD93D;
+  --complex: #6BCB77;
+  --comp-complex: #4D96FF;
+  --bg: #FFF9F0;
+  --card-bg: #FFFFFF;
+  --text: #2D2D2D;
+  --shadow: 0 6px 20px rgba(0,0,0,0.10);
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FFD93D 30%, #6BCB77 65%, #4D96FF 100%);
+  padding: 36px 24px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦';
+  position: absolute; top: 8px; left: 0; right: 0;
+  font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 4px;
+}
+header h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  color: #fff;
+  text-shadow: 3px 4px 0px rgba(0,0,0,0.18);
+  letter-spacing: 1px;
+}
+header p {
+  color: rgba(255,255,255,0.92);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+.xp-bar-wrap {
+  margin: 14px auto 0;
+  max-width: 360px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 30px;
+  height: 18px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.6);
+}
+.xp-bar {
+  height: 100%;
+  width: 0%;
+  background: #fff;
+  border-radius: 30px;
+  transition: width 0.6s cubic-bezier(.4,2,.6,1);
+}
+.xp-label {
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  margin-top: 5px;
+  letter-spacing: 1px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 16px 0;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.22s;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.13);
+  background: #e0e0e0;
+  color: #777;
+  letter-spacing: 0.5px;
+}
+.tab-btn.active, .tab-btn:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+}
+.tab-btn[data-tab="learn"].active, .tab-btn[data-tab="learn"]:hover { background: var(--simple); }
+.tab-btn[data-tab="examples"].active, .tab-btn[data-tab="examples"]:hover { background: #e67e22; }
+.tab-btn[data-tab="quiz"].active, .tab-btn[data-tab="quiz"]:hover { background: var(--comp-complex); }
+.tab-btn[data-tab="boss"].active, .tab-btn[data-tab="boss"]:hover { background: #8e44ad; }
+
+/* PANELS */
+.panel { display: none; padding: 24px 16px 40px; max-width: 860px; margin: 0 auto; }
+.panel.active { display: block; animation: fadeUp 0.35s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* LEARN PANEL */
+.type-card {
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow);
+  border-left: 8px solid;
+  background: #fff;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.type-card:hover { transform: translateY(-3px); }
+.type-card.simple  { border-color: var(--simple); }
+.type-card.compound { border-color: var(--compound); }
+.type-card.complex  { border-color: var(--complex); }
+.type-card.comp-complex { border-color: var(--comp-complex); }
+
+.type-card h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.55rem;
+  margin-bottom: 6px;
+}
+.type-card.simple h2 { color: var(--simple); }
+.type-card.compound h2 { color: #e6a800; }
+.type-card.complex h2 { color: #2d9e45; }
+.type-card.comp-complex h2 { color: var(--comp-complex); }
+
+.badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+.simple .badge  { background: var(--simple); }
+.compound .badge { background: #FFB800; color: #fff; }
+.complex .badge  { background: var(--complex); }
+.comp-complex .badge { background: var(--comp-complex); }
+
+.definition {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.formula {
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  font-family: 'Fredoka One', cursive;
+  letter-spacing: 0.5px;
+}
+.ex-list { list-style: none; padding: 0; }
+.ex-list li {
+  padding: 7px 12px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  font-size: 0.97rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.simple .ex-list li  { background: #fff0f0; }
+.compound .ex-list li { background: #fffde0; }
+.complex .ex-list li  { background: #f0fff4; }
+.comp-complex .ex-list li { background: #f0f5ff; }
+
+.ex-list li .kw {
+  font-weight: 900;
+  font-style: italic;
+  text-decoration: underline dotted;
+}
+
+/* key terms legend */
+.legend {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow);
+}
+.legend h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #444;
+}
+.legend-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.legend-item {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* EXAMPLES TAB */
+.examples-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media(max-width:600px) { .examples-grid { grid-template-columns: 1fr; } }
+
+.eg-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  border-top: 5px solid;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.55;
+}
+.eg-card.simple    { border-color: var(--simple); }
+.eg-card.compound  { border-color: #FFB800; }
+.eg-card.complex   { border-color: var(--complex); }
+.eg-card.cc        { border-color: var(--comp-complex); }
+.eg-card .type-tag {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+.eg-card.simple .type-tag    { color: var(--simple); }
+.eg-card.compound .type-tag  { color: #e6a800; }
+.eg-card.complex .type-tag   { color: #2d9e45; }
+.eg-card.cc .type-tag        { color: var(--comp-complex); }
+
+.eg-card em { font-style: normal; font-weight: 900; text-decoration: underline; }
+
+.section-heading {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem;
+  margin: 28px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dot {
+  width: 18px; height: 18px; border-radius: 50%; display: inline-block; flex-shrink: 0;
+}
+
+/* QUIZ PANEL */
+.quiz-progress {
+  text-align: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+  color: #555;
+}
+.question-card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+  text-align: center;
+}
+.question-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+.question-sentence {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.55;
+  margin-bottom: 22px;
+  color: #222;
+}
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media(max-width:480px) { .options { grid-template-columns: 1fr; } }
+
+.opt-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.05rem;
+  padding: 14px 10px;
+  border: 3px solid transparent;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: #f4f4f4;
+  color: #444;
+  letter-spacing: 0.4px;
+}
+.opt-btn:hover:not(:disabled) { transform: scale(1.04); filter: brightness(0.96); }
+.opt-btn.simple   { background: #FFE8E8; border-color: var(--simple); color: #c0392b; }
+.opt-btn.compound { background: #FFF8CC; border-color: #FFB800; color: #b8860b; }
+.opt-btn.complex  { background: #E8F8EC; border-color: var(--complex); color: #1e7e34; }
+.opt-btn.cc       { background: #E8F0FF; border-color: var(--comp-complex); color: #1a5fb4; }
+.opt-btn.correct  { background: #6BCB77 !important; color: #fff !important; border-color: #2d9e45 !important; transform: scale(1.06); }
+.opt-btn.wrong    { background: #FF6B6B !important; color: #fff !important; border-color: #c0392b !important; }
+.opt-btn:disabled { cursor: default; }
+
+.feedback-box {
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-top: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  display: none;
+  text-align: left;
+  line-height: 1.5;
+}
+.feedback-box.show { display: block; animation: fadeUp 0.3s ease; }
+.feedback-box.correct-fb { background: #f0fff4; border: 2px solid var(--complex); color: #1e7e34; }
+.feedback-box.wrong-fb   { background: #fff0f0; border: 2px solid var(--simple); color: #c0392b; }
+
+.nav-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+.nav-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+  transition: all 0.2s;
+  color: #fff;
+}
+.nav-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.15); }
+.nav-btn.next  { background: var(--comp-complex); }
+.nav-btn.prev  { background: #aaa; }
+.nav-btn.finish { background: #8e44ad; }
+.nav-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+/* RESULTS */
+#results-panel {
+  display: none;
+  text-align: center;
+  padding: 30px 20px;
+  animation: fadeUp 0.4s ease;
+}
+#results-panel h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+.score-circle {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.4rem;
+  color: #fff;
+  margin: 16px auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+.score-msg {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #555;
+}
+.retry-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  padding: 12px 34px;
+  border: none;
+  border-radius: 40px;
+  background: var(--simple);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+  transition: all 0.2s;
+}
+.retry-btn:hover { transform: translateY(-2px); }
+
+/* BOSS PANEL */
+.boss-intro {
+  background: linear-gradient(135deg, #8e44ad, #4D96FF);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 22px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.boss-intro h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+.boss-intro p { font-size: 1rem; font-weight: 700; opacity: 0.92; }
+
+.classify-sentence {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.classify-text {
+  flex: 1;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.5;
+  min-width: 180px;
+}
+.classify-select {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.92rem;
+  padding: 8px 12px;
+  border: 3px solid #ddd;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #f9f9f9;
+  color: #444;
+  transition: border-color 0.2s;
+  min-width: 200px;
+}
+.classify-select:focus { outline: none; border-color: var(--comp-complex); }
+.classify-select.correct-sel { border-color: var(--complex); background: #f0fff4; color: #1e7e34; }
+.classify-select.wrong-sel   { border-color: var(--simple); background: #fff0f0; color: #c0392b; }
+
+.check-boss-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.15rem;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 40px;
+  background: linear-gradient(135deg, #8e44ad, #4D96FF);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+  display: block;
+  margin: 18px auto 0;
+  transition: all 0.2s;
+}
+.check-boss-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.18); }
+
+#boss-result {
+  display: none;
+  text-align: center;
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-top: 18px;
+  animation: fadeUp 0.3s ease;
+}
+#boss-result h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+/* TOOLTIP */
+.tooltip-wrap { position: relative; display: inline; }
+.tooltip-wrap .tip {
+  display: none;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+.tooltip-wrap:hover .tip { display: block; }
+
+/* RESPONSIVE */
+@media(max-width:480px) {
+  .type-card h2 { font-size: 1.3rem; }
+  .question-sentence { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 Grammar Galaxy 🌟</h1>
+  <p>Master the 4 Sentence Structures!</p>
+  <div class="xp-bar-wrap"><div class="xp-bar" id="xpBar"></div></div>
+  <div class="xp-label" id="xpLabel">⭐ 0 XP — Level 1</div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="learn" onclick="switchTab('learn')">📖 Learn</button>
+  <button class="tab-btn" data-tab="examples" onclick="switchTab('examples')">💡 Examples</button>
+  <button class="tab-btn" data-tab="quiz" onclick="switchTab('quiz')">🎯 Quiz</button>
+  <button class="tab-btn" data-tab="boss" onclick="switchTab('boss')">👾 Boss Challenge</button>
+</div>
+
+<!-- ===== LEARN ===== -->
+<div class="panel active" id="panel-learn">
+
+  <div class="legend">
+    <h3>🔑 Key Terms to Know</h3>
+    <div class="legend-row">
+      <span class="legend-item" style="background:#FF6B6B">Independent Clause (IC)</span>
+      <span class="legend-item" style="background:#8e44ad">Dependent Clause (DC)</span>
+      <span class="legend-item" style="background:#e67e22">Coordinating Conj. (FANBOYS)</span>
+      <span class="legend-item" style="background:#27ae60">Subordinating Conj.</span>
+    </div>
+    <p style="margin-top:10px;font-size:0.9rem;font-weight:700;color:#666;">
+      💡 <b>IC</b> = a complete thought that can stand alone &nbsp;|&nbsp; <b>DC</b> = incomplete — needs an IC to make sense
+    </p>
+  </div>
+
+  <!-- SIMPLE -->
+  <div class="type-card simple">
+    <span class="badge">🔴 TYPE 1</span>
+    <h2>Simple Sentence</h2>
+    <div class="definition">Contains <b>ONE independent clause</b>. It has a subject and a verb, and expresses a complete thought. It may have phrases, but no other clauses.</div>
+    <div class="formula">📐 Formula: [ Independent Clause ]</div>
+    <ul class="ex-list">
+      <li>🐶 <b>The dog barks.</b></li>
+      <li>☀️ <b>The sun rises in the east.</b></li>
+      <li>🏃 <b>She runs every morning.</b></li>
+      <li>📚 <b>Tom loves reading books.</b></li>
+      <li>🐱 <b>The cat sat on the mat.</b></li>
+      <li>🎸 <b>My brother plays the guitar beautifully.</b></li>
+      <li>🍕 <b>We ate pizza for dinner last night.</b></li>
+      <li>🌧️ <b>It rained heavily throughout the afternoon.</b></li>
+      <li>✏️ <b>The teacher wrote the answer on the board.</b></li>
+      <li>🚀 <b>The rocket launched into the sky.</b></li>
+    </ul>
+  </div>
+
+  <!-- COMPOUND -->
+  <div class="type-card compound">
+    <span class="badge">🟡 TYPE 2</span>
+    <h2>Compound Sentence</h2>
+    <div class="definition">Contains <b>TWO or more independent clauses</b> joined by a <b>coordinating conjunction (FANBOYS: For, And, Nor, But, Or, Yet, So)</b> or a semicolon.</div>
+    <div class="formula">📐 Formula: [ IC ] + <span style="color:#e67e22">FANBOYS / ;</span> + [ IC ]</div>
+    <ul class="ex-list">
+      <li>☀️🌧️ <b>The sun was shining, <span class="kw">but</span> it was still cold outside.</b></li>
+      <li>🎮📺 <b>I wanted to play, <span class="kw">but</span> my homework was not done.</b></li>
+      <li>🐱🐶 <b>She likes cats, <span class="kw">and</span> he likes dogs.</b></li>
+      <li>🍎🍊 <b>You can have the apple, <span class="kw">or</span> you can have the orange.</b></li>
+      <li>🏃🛋️ <b>He ran fast, <span class="kw">yet</span> he missed the bus.</b></li>
+      <li>💤📖 <b>I was tired, <span class="kw">so</span> I went to bed early.</b></li>
+      <li>⚽🏏 <b>Maya loves football; her brother prefers cricket.</b></li>
+      <li>📝✅ <b>She studied hard, <span class="kw">for</span> the exam was very important.</b></li>
+      <li>🎵🤫 <b>He wanted to sing, <span class="kw">but</span> he did not know the words.</b></li>
+      <li>🌊🏊 <b>The waves were strong, <span class="kw">nor</span> did the swimmers give up.</b></li>
+    </ul>
+  </div>
+
+  <!-- COMPLEX -->
+  <div class="type-card complex">
+    <span class="badge">🟢 TYPE 3</span>
+    <h2>Complex Sentence</h2>
+    <div class="definition">Contains <b>ONE independent clause</b> + <b>ONE or more dependent clauses</b> joined by a <b>subordinating conjunction</b> (because, although, when, if, since, after, before, while, unless, until…)</div>
+    <div class="formula">📐 Formula: [ IC ] + <span style="color:#27ae60">Sub.Conj.</span> + [ DC ]  <i>OR</i>  <span style="color:#27ae60">Sub.Conj.</span> + [ DC ] , [ IC ]</div>
+    <ul class="ex-list">
+      <li>☔ <b>She carried an umbrella <span class="kw">because</span> it was raining.</b></li>
+      <li>😴 <b>I went to bed <span class="kw">after</span> I finished my homework.</b></li>
+      <li>🎉 <b><span class="kw">Although</span> he was tired, he attended the party.</b></li>
+      <li>🦁 <b>The children hid <span class="kw">when</span> the lion roared.</b></li>
+      <li>📱 <b>I will call you <span class="kw">as soon as</span> I reach home.</b></li>
+      <li>🏆 <b><span class="kw">Since</span> she trained every day, she won the championship.</b></li>
+      <li>❄️ <b>We stayed indoors <span class="kw">until</span> the storm passed.</b></li>
+      <li>🚪 <b><span class="kw">Unless</span> you hurry, we will miss the show.</b></li>
+      <li>📖 <b>He reads books <span class="kw">whenever</span> he has free time.</b></li>
+      <li>✈️ <b><span class="kw">Before</span> she boarded the plane, she called her parents.</b></li>
+    </ul>
+  </div>
+
+  <!-- COMPOUND-COMPLEX -->
+  <div class="type-card comp-complex">
+    <span class="badge">🔵 TYPE 4</span>
+    <h2>Compound-Complex Sentence</h2>
+    <div class="definition">Contains <b>TWO or more independent clauses</b> AND <b>at least ONE dependent clause</b>. It combines the features of both compound and complex sentences.</div>
+    <div class="formula">📐 Formula: [ IC ] + <span style="color:#e67e22">FANBOYS</span> + [ IC ] + <span style="color:#27ae60">Sub.Conj.</span> + [ DC ]</div>
+    <ul class="ex-list">
+      <li>🌧️🏠 <b>I stayed home, <span class="kw">and</span> I read a book <span class="kw">because</span> it was raining.</b></li>
+      <li>📝🎉 <b>She studied hard, <span class="kw">so</span> she passed the exam <span class="kw">although</span> it was difficult.</b></li>
+      <li>🐕🏡 <b><span class="kw">After</span> we ate dinner, Tom washed the dishes, <span class="kw">and</span> Sara swept the floor.</b></li>
+      <li>☀️🌊 <b>The weather was perfect, <span class="kw">so</span> we went to the beach <span class="kw">although</span> we had a lot of work.</b></li>
+      <li>🎓🏆 <b><span class="kw">Because</span> she practised daily, she became the best, <span class="kw">and</span> everyone admired her.</b></li>
+      <li>🐦🌺 <b>The birds sang <span class="kw">while</span> the sun rose, <span class="kw">and</span> the flowers bloomed in the garden.</b></li>
+      <li>📱💬 <b>I called him, <span class="kw">but</span> he did not answer <span class="kw">because</span> he was asleep.</b></li>
+      <li>🎭📰 <b><span class="kw">When</span> the play ended, the audience cheered, <span class="kw">and</span> the actors took a bow.</b></li>
+      <li>🏔️🥾 <b>We reached the summit, <span class="kw">and</span> we celebrated <span class="kw">because</span> we had trained for months.</b></li>
+      <li>🍲🌶️ <b>The soup was delicious <span class="kw">although</span> it was spicy, <span class="kw">so</span> everyone asked for seconds.</b></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ===== EXAMPLES ===== -->
+<div class="panel" id="panel-examples">
+
+  <p style="font-size:1rem;font-weight:700;color:#666;margin-bottom:10px;">
+    🔍 Tap any card to see a breakdown! <b>Underlined words</b> are the key joining words.
+  </p>
+
+  <div class="section-heading">
+    <span class="dot" style="background:var(--simple)"></span> Simple Sentences
+  </div>
+  <div class="examples-grid">
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>Birds fly.</div>
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>The baby laughed.</div>
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>Riya sings beautifully.</div>
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>The old man sat quietly under the tree.</div>
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>Lions hunt at night.</div>
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>The tall boy kicked the ball hard.</div>
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>My mother baked a chocolate cake.</div>
+    <div class="eg-card simple"><span class="type-tag">SIMPLE</span>Thunder rumbled in the distance.</div>
+  </div>
+
+  <div class="section-heading">
+    <span class="dot" style="background:#FFB800"></span> Compound Sentences
+  </div>
+  <div class="examples-grid">
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>I was hungry, <em>so</em> I made a sandwich.</div>
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>She smiled, <em>and</em> the room lit up.</div>
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>He tried hard, <em>but</em> he could not lift the box.</div>
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>You can stay, <em>or</em> you can leave — it's your choice.</div>
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>She loves tea; he prefers coffee.</div>
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>The bell rang, <em>and</em> the students rushed out.</div>
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>He is poor, <em>yet</em> he is always cheerful.</div>
+    <div class="eg-card compound"><span class="type-tag">COMPOUND</span>I wanted to help, <em>but</em> I did not know how.</div>
+  </div>
+
+  <div class="section-heading">
+    <span class="dot" style="background:var(--complex)"></span> Complex Sentences
+  </div>
+  <div class="examples-grid">
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span><em>Because</em> it was late, we took a taxi.</div>
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span>She laughed <em>whenever</em> he made a joke.</div>
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span>I will help you <em>if</em> you ask me nicely.</div>
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span><em>Although</em> it was cold, he went for a swim.</div>
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span>He left <em>before</em> the movie ended.</div>
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span>We waited <em>until</em> the rain stopped.</div>
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span><em>Since</em> you are here, let's begin.</div>
+    <div class="eg-card complex"><span class="type-tag">COMPLEX</span>She wore a coat <em>because</em> the wind was cold.</div>
+  </div>
+
+  <div class="section-heading">
+    <span class="dot" style="background:var(--comp-complex)"></span> Compound-Complex Sentences
+  </div>
+  <div class="examples-grid">
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span><em>Although</em> it was raining, we went out, <em>and</em> we got completely soaked.</div>
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span>She read a book, <em>and</em> I watched TV <em>while</em> the kids played outside.</div>
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span><em>Because</em> he was nervous, he forgot his lines, <em>but</em> the audience clapped anyway.</div>
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span>I packed my bag, <em>and</em> I said goodbye <em>before</em> I left for school.</div>
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span>The game was exciting, <em>but</em> we lost <em>although</em> we played our best.</div>
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span><em>When</em> summer comes, we go to the hills, <em>and</em> we stay there for a week.</div>
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span>He called her, <em>but</em> she didn't pick up <em>because</em> her phone was on silent.</div>
+    <div class="eg-card cc"><span class="type-tag">COMPOUND-COMPLEX</span>The children played outside, <em>and</em> their parents rested <em>since</em> it was a holiday.</div>
+  </div>
+
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="panel" id="panel-quiz">
+
+  <div id="quiz-area">
+    <div class="quiz-progress">Question <span id="qNum">1</span> of 10 &nbsp;|&nbsp; ⭐ <span id="qScore">0</span> / 10</div>
+
+    <div class="question-card">
+      <div class="question-num" id="qNumLabel">QUESTION 1</div>
+      <div class="question-sentence" id="qSentence">Loading…</div>
+      <div class="options" id="optionsRow"></div>
+      <div class="feedback-box" id="feedbackBox"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn prev" id="prevBtn" onclick="changeQ(-1)" disabled>← Back</button>
+      <button class="nav-btn next" id="nextBtn" onclick="changeQ(1)" disabled>Next →</button>
+      <button class="nav-btn finish" id="finishBtn" onclick="showResults()" style="display:none">🏁 Finish!</button>
+    </div>
+  </div>
+
+  <div id="results-panel">
+    <h2>🎉 Quiz Complete!</h2>
+    <div class="score-circle" id="scoreCircle">0/10</div>
+    <div class="score-msg" id="scoreMsg"></div>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 Try Again</button>
+  </div>
+
+</div>
+
+<!-- ===== BOSS CHALLENGE ===== -->
+<div class="panel" id="panel-boss">
+
+  <div class="boss-intro">
+    <h2>👾 Boss Challenge!</h2>
+    <p>Classify ALL 10 sentences correctly to defeat the Grammar Boss and earn 50 Bonus XP! 💥</p>
+  </div>
+
+  <div id="boss-sentences"></div>
+
+  <button class="check-boss-btn" onclick="checkBoss()">⚡ Check All Answers!</button>
+
+  <div id="boss-result">
+    <h3 id="bossResultTitle"></h3>
+    <p id="bossResultMsg" style="font-size:1rem;font-weight:700;color:#555;margin-top:8px;"></p>
+  </div>
+
+</div>
+
+<script>
+// ===== XP SYSTEM =====
+let xp = 0;
+const XP_MAX = 100;
+function addXP(amount) {
+  xp = Math.min(xp + amount, XP_MAX);
+  document.getElementById('xpBar').style.width = xp + '%';
+  const level = Math.floor(xp / 25) + 1;
+  const stars = ['⭐','🌟','💫','✨','🔥'][Math.min(level-1,4)];
+  document.getElementById('xpLabel').textContent = `${stars} ${xp} XP — Level ${level}`;
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+}
+
+// ===== QUIZ DATA =====
+const questions = [
+  {
+    sentence: "The wind howled through the trees.",
+    answer: "Simple",
+    explanation: "One subject (The wind), one verb (howled) — one independent clause. No conjunctions linking clauses."
+  },
+  {
+    sentence: "I wanted to sleep, but I had too much work to finish.",
+    answer: "Compound",
+    explanation: "'I wanted to sleep' and 'I had too much work to finish' are two independent clauses joined by the coordinating conjunction <b>but</b>."
+  },
+  {
+    sentence: "Although she was nervous, she delivered a wonderful speech.",
+    answer: "Complex",
+    explanation: "'Although she was nervous' is a dependent clause (subordinating conj. <b>although</b>). 'She delivered a wonderful speech' is the independent clause."
+  },
+  {
+    sentence: "Because it was her birthday, she got a gift, and everyone sang for her.",
+    answer: "Compound-Complex",
+    explanation: "Dependent clause: 'Because it was her birthday'. Two independent clauses: 'she got a gift' + 'everyone sang for her' joined by <b>and</b>."
+  },
+  {
+    sentence: "The train arrived late, so we missed the connecting flight.",
+    answer: "Compound",
+    explanation: "Two independent clauses: 'The train arrived late' and 'we missed the connecting flight', joined by the coordinating conjunction <b>so</b>."
+  },
+  {
+    sentence: "He reads comics whenever he is bored.",
+    answer: "Complex",
+    explanation: "'He reads comics' is the independent clause. 'Whenever he is bored' is the dependent clause introduced by the subordinating conjunction <b>whenever</b>."
+  },
+  {
+    sentence: "My little sister won the drawing competition.",
+    answer: "Simple",
+    explanation: "One independent clause — one subject (My little sister) and one verb (won). No dependent clauses or coordinating conjunctions linking clauses."
+  },
+  {
+    sentence: "She was exhausted after the long journey, but she still helped with dinner, and she even told us a story.",
+    answer: "Compound-Complex",
+    explanation: "Dependent clause: 'after the long journey'. Three independent clauses joined by <b>but</b> and <b>and</b>: classic compound-complex!"
+  },
+  {
+    sentence: "The puppy wagged its tail and barked loudly.",
+    answer: "Simple",
+    explanation: "One subject (The puppy) with two verbs (wagged, barked) — this is a simple sentence with a compound predicate, NOT a compound sentence."
+  },
+  {
+    sentence: "Until the scores are announced, we will stay here, and we will keep hoping for good news.",
+    answer: "Compound-Complex",
+    explanation: "Dependent clause: 'Until the scores are announced'. Two independent clauses joined by <b>and</b>."
+  }
+];
+
+const types = ["Simple","Compound","Complex","Compound-Complex"];
+const typeClasses = { "Simple":"simple","Compound":"compound","Complex":"complex","Compound-Complex":"cc" };
+const optBtnClasses = { "Simple":"simple","Compound":"compound","Complex":"complex","Compound-Complex":"cc" };
+
+let currentQ = 0;
+let answers = new Array(10).fill(null);
+let quizDone = new Array(10).fill(false);
+
+function loadQuestion(idx) {
+  const q = questions[idx];
+  document.getElementById('qNum').textContent = idx + 1;
+  document.getElementById('qNumLabel').textContent = 'QUESTION ' + (idx + 1);
+  document.getElementById('qSentence').textContent = '"' + q.sentence + '"';
+  document.getElementById('qScore').textContent = answers.filter((a,i) => a === questions[i].answer).length;
+
+  const row = document.getElementById('optionsRow');
+  row.innerHTML = '';
+  types.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn ' + optBtnClasses[t];
+    btn.textContent = t;
+    btn.onclick = () => selectAnswer(t, idx);
+    if (quizDone[idx]) {
+      btn.disabled = true;
+      if (t === q.answer) btn.classList.add('correct');
+      else if (t === answers[idx]) btn.classList.add('wrong');
+    }
+    row.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedbackBox');
+  if (quizDone[idx]) {
+    const correct = answers[idx] === q.answer;
+    fb.className = 'feedback-box show ' + (correct ? 'correct-fb' : 'wrong-fb');
+    fb.innerHTML = correct
+      ? `✅ <b>Correct!</b> ${q.explanation}`
+      : `❌ <b>Not quite!</b> The correct answer is <b>${q.answer}</b>. ${q.explanation}`;
+  } else {
+    fb.className = 'feedback-box';
+    fb.innerHTML = '';
+  }
+
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = !quizDone[idx] || idx === 9;
+  document.getElementById('finishBtn').style.display = (idx === 9 && quizDone[idx]) ? 'inline-block' : 'none';
+  document.getElementById('nextBtn').style.display = (idx === 9) ? 'none' : 'inline-block';
+}
+
+function selectAnswer(chosen, idx) {
+  if (quizDone[idx]) return;
+  answers[idx] = chosen;
+  quizDone[idx] = true;
+  const correct = chosen === questions[idx].answer;
+  if (correct) addXP(5);
+  loadQuestion(idx);
+}
+
+function changeQ(dir) {
+  currentQ = Math.max(0, Math.min(9, currentQ + dir));
+  loadQuestion(currentQ);
+}
+
+function showResults() {
+  const score = answers.filter((a,i) => a === questions[i].answer).length;
+  document.getElementById('quiz-area').style.display = 'none';
+  const rp = document.getElementById('results-panel');
+  rp.style.display = 'block';
+  const circle = document.getElementById('scoreCircle');
+  circle.textContent = score + '/10';
+  const colors = ['#e74c3c','#e67e22','#f39c12','#27ae60','#2ecc71'];
+  circle.style.background = colors[Math.min(Math.floor(score/2.5), 4)];
+  const msgs = [
+    "Don't worry — every expert was once a beginner! Review the Learn tab. 💪",
+    "Good effort! A little more practice and you'll get there. 🌱",
+    "Nice going! You're getting the hang of it! 😊",
+    "Great job! You really know your sentence types! 🎉",
+    "PERFECT SCORE! 🏆 You are the Grammar Champion! 🌟"
+  ];
+  document.getElementById('scoreMsg').textContent = msgs[Math.min(Math.floor(score/2.5), 4)];
+  if (score >= 8) addXP(20);
+}
+
+function resetQuiz() {
+  currentQ = 0;
+  answers = new Array(10).fill(null);
+  quizDone = new Array(10).fill(false);
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('results-panel').style.display = 'none';
+  loadQuestion(0);
+}
+
+// ===== BOSS CHALLENGE =====
+const bossQuestions = [
+  { s: "The stars twinkled in the dark sky.", a: "Simple" },
+  { s: "She called him, but he did not answer because he was busy.", a: "Compound-Complex" },
+  { s: "When the alarm rang, he jumped out of bed.", a: "Complex" },
+  { s: "I enjoy hiking and cycling.", a: "Simple" },
+  { s: "The tea is hot, so let it cool down before you drink it.", a: "Compound" },
+  { s: "Since the exams are near, she studies every night, and she revises all her notes.", a: "Compound-Complex" },
+  { s: "He tried his best, yet he failed the test.", a: "Compound" },
+  { s: "Unless you practise daily, you will not improve.", a: "Complex" },
+  { s: "The flowers bloomed after the rain.", a: "Complex" },
+  { s: "We packed our bags, and we left early because the traffic was bad.", a: "Compound-Complex" }
+];
+
+function buildBoss() {
+  const wrap = document.getElementById('boss-sentences');
+  wrap.innerHTML = '';
+  bossQuestions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'classify-sentence';
+    div.innerHTML = `
+      <div class="classify-text">${i+1}. "${q.s}"</div>
+      <select class="classify-select" id="boss-sel-${i}">
+        <option value="">— Choose —</option>
+        <option value="Simple">Simple</option>
+        <option value="Compound">Compound</option>
+        <option value="Complex">Complex</option>
+        <option value="Compound-Complex">Compound-Complex</option>
+      </select>`;
+    wrap.appendChild(div);
+  });
+  document.getElementById('boss-result').style.display = 'none';
+}
+
+function checkBoss() {
+  let correct = 0;
+  bossQuestions.forEach((q, i) => {
+    const sel = document.getElementById('boss-sel-' + i);
+    sel.disabled = true;
+    if (sel.value === q.a) {
+      correct++;
+      sel.className = 'classify-select correct-sel';
+    } else {
+      sel.className = 'classify-select wrong-sel';
+      // Show correct answer in the option text
+      for (let opt of sel.options) {
+        if (opt.value === q.a) opt.text = '✅ ' + opt.text;
+      }
+    }
+  });
+  const res = document.getElementById('boss-result');
+  res.style.display = 'block';
+  const title = document.getElementById('bossResultTitle');
+  const msg = document.getElementById('bossResultMsg');
+  if (correct === 10) {
+    addXP(50);
+    title.textContent = '🏆 BOSS DEFEATED! Perfect Score!';
+    res.style.background = '#f0fff4';
+    msg.textContent = 'Amazing! You got all 10 correct and earned 50 Bonus XP! You are the Grammar Galaxy Champion! 🌟';
+  } else if (correct >= 7) {
+    addXP(25);
+    title.textContent = `🎉 ${correct}/10 — Great Job!`;
+    res.style.background = '#f0f5ff';
+    msg.textContent = `You got ${correct} out of 10 and earned 25 Bonus XP! Review the highlighted ones and try again!`;
+  } else {
+    title.textContent = `💪 ${correct}/10 — Keep Practising!`;
+    res.style.background = '#fff8f0';
+    msg.textContent = `${correct} correct! Go back to the Learn and Examples tabs to review the sentence structures.`;
+  }
+}
+
+// ===== INIT =====
+loadQuestion(0);
+buildBoss();
+</script>
+</body>
+</html>
